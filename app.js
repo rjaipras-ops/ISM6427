@@ -1,4 +1,5 @@
 const DEFAULT = { name: "Boca Raton", lat: 26.3683, lon: -80.1289 };
+const USER_NAME = "Rajesh Jaiprashad";
 
 // WMO weather codes -> [description, icon]
 const CODES = {
@@ -88,4 +89,23 @@ $("search").addEventListener("submit", async (e) => {
   loadWeather({ name: place.name, lat: place.latitude, lon: place.longitude });
 });
 
+function setTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  try {
+    localStorage.setItem("theme", theme);
+  } catch {}
+  document.querySelectorAll(".themes button").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.theme === theme);
+  });
+}
+
+document.querySelectorAll(".themes button").forEach((btn) => {
+  btn.addEventListener("click", () => setTheme(btn.dataset.theme));
+});
+
+const hour = new Date().getHours();
+const timeOfDay = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+$("greeting").textContent = `${timeOfDay}, ${USER_NAME}`;
+
+setTheme(document.documentElement.dataset.theme);
 loadWeather(DEFAULT);
